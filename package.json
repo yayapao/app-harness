@@ -1,7 +1,7 @@
 {
   "name": "app-harness",
   "version": "0.2.0",
-  "description": "框架无关的 Browser Harness 核心、迁移包和 Web 入口模板",
+  "description": "AI-native Browser Harness toolkit for governed in-app agents, tools, streaming conversations, approvals, and Next.js interfaces.",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -12,9 +12,7 @@
     "test": "node --test scripts/tests/*.test.mjs",
     "test:harness": "tsx --test harness/core/*.test.ts harness/adapters/*.test.ts harness/tests/*.test.ts",
     "typecheck": "tsc --noEmit",
-    "harness:install-nextpier": "node scripts/harness.mjs install-nextpier",
-    "mirror:check": "node scripts/mirror.mjs check",
-    "mirror:sync": "node scripts/mirror.mjs sync"
+    "harness:install-nextpier": "node scripts/harness.mjs install-nextpier"
   },
   "dependencies": {
     "eventsource-parser": "^3.0.6",
