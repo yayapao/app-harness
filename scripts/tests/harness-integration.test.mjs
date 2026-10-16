@@ -62,6 +62,38 @@ test('preparing a kit exports complete references, hashes and a handoff without 
   assert.deepEqual(await inventory(project), before);
 });
 
+test('kits work without architecture notes and never export them when present', async (t) => {
+  const { temporary, project } = await fixture(t);
+  const source = path.join(temporary, 'public source');
+  for (const entry of harnessSourceEntries.filter(
+    (entry) => entry !== 'docs/architecture.md'
+  )) {
+    await mkdir(path.dirname(path.join(source, entry)), { recursive: true });
+    await cp(path.join(repository, entry), path.join(source, entry), {
+      recursive: true,
+    });
+  }
+  for (const includeNotes of [false, true]) {
+    if (includeNotes)
+      await file(source, 'docs/architecture.md', 'Internal architecture notes');
+    const result = await prepareHarnessIntegration(project, source, {
+      output: path.join(temporary, includeNotes ? 'internal kit' : 'public kit'),
+    });
+    const manifest = JSON.parse(
+      await readFile(path.join(result.output, 'manifest.json'), 'utf8')
+    );
+    assert.ok(await readFile(path.join(result.output, manifest.entrypoint)));
+    assert.equal(
+      manifest.files.some((entry) => entry.path === 'source/docs/architecture.md'),
+      false
+    );
+    await assert.rejects(
+      realpath(path.join(result.output, 'source/docs/architecture.md')),
+      /ENOENT/
+    );
+  }
+});
+
 test('output overlap and existing destinations preserve both projects and existing output', async (t) => {
   const { temporary, project } = await fixture(t);
   await file(project, 'service.ts', 'export function readValue() {}');

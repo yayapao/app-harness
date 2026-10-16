@@ -18,7 +18,6 @@ export const harnessSourceEntries = [
   'templates/next',
   'profiles',
   '.agents/skills/harness-integrator',
-  'docs/architecture.md',
   'docs/integration-prompt.md',
   'README.md',
   'package.json',
