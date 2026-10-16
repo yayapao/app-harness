@@ -1,0 +1,87 @@
+/* Cult UI Halo Tabs, using the same semantic accents as Halo surfaces. */
+.list {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: fit-content;
+  max-width: 100%;
+  height: 32px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: color-mix(in oklch, var(--muted) 50%, transparent);
+}
+
+.trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: 4px;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  outline: none;
+  cursor: pointer;
+}
+
+.list[data-orientation='vertical'] {
+  height: auto;
+  flex-direction: column;
+}
+
+.list[data-orientation='vertical'] .trigger {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.trigger[data-state='active'],
+.trigger[data-state='checked'],
+.trigger:hover {
+  color: var(--foreground);
+}
+
+.trigger:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.trigger:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.trigger svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.indicator {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--card);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--foreground) 8%, transparent);
+  pointer-events: none;
+}
+
+.indicator::after {
+  content: '';
+  position: absolute;
+  inset: auto 8px 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--chart-4),
+    var(--info),
+    transparent
+  );
+}

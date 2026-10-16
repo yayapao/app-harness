@@ -1,0 +1,36 @@
+{
+  "name": "app-harness",
+  "version": "0.2.0",
+  "description": "框架无关的 Browser Harness 核心、迁移包和 Web 入口模板",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "harness:prompt": "node scripts/harness.mjs prompt",
+    "harness:prepare": "node scripts/harness.mjs prepare",
+    "harness:inspect": "node scripts/harness.mjs inspect",
+    "test": "node --test scripts/tests/*.test.mjs",
+    "test:harness": "tsx --test harness/core/*.test.ts harness/adapters/*.test.ts harness/tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "harness:install-nextpier": "node scripts/harness.mjs install-nextpier",
+    "mirror:check": "node scripts/mirror.mjs check",
+    "mirror:sync": "node scripts/mirror.mjs sync"
+  },
+  "dependencies": {
+    "eventsource-parser": "^3.0.6",
+    "openai": "^7.4.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0",
+    "tsx": "^4.20.6"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yayapao/app-harness.git"
+  }
+}

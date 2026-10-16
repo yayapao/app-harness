@@ -1,0 +1,9 @@
+image: node:22
+
+check:
+  script:
+    - npm ci
+    - npm test
+    - npm run typecheck
+    - npm run test:harness
+    - git diff --check
