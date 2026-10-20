@@ -62,20 +62,20 @@ test('preparing a kit exports complete references, hashes and a handoff without 
   assert.deepEqual(await inventory(project), before);
 });
 
-test('kits work without architecture notes and never export them when present', async (t) => {
+test('kits work without repository docs and never export them when present', async (t) => {
   const { temporary, project } = await fixture(t);
   const source = path.join(temporary, 'public source');
-  for (const entry of harnessSourceEntries.filter(
-    (entry) => entry !== 'docs/architecture.md'
-  )) {
+  for (const entry of harnessSourceEntries) {
     await mkdir(path.dirname(path.join(source, entry)), { recursive: true });
     await cp(path.join(repository, entry), path.join(source, entry), {
       recursive: true,
     });
   }
   for (const includeNotes of [false, true]) {
-    if (includeNotes)
+    if (includeNotes) {
       await file(source, 'docs/architecture.md', 'Internal architecture notes');
+      await file(source, 'docs/integration-prompt.md', 'Old integration prompt');
+    }
     const result = await prepareHarnessIntegration(project, source, {
       output: path.join(temporary, includeNotes ? 'internal kit' : 'public kit'),
     });
@@ -84,11 +84,15 @@ test('kits work without architecture notes and never export them when present', 
     );
     assert.ok(await readFile(path.join(result.output, manifest.entrypoint)));
     assert.equal(
-      manifest.files.some((entry) => entry.path === 'source/docs/architecture.md'),
+      manifest.documentation,
+      'https://github.com/yayapao/aiwiki/tree/main/app-harness'
+    );
+    assert.equal(
+      manifest.files.some((entry) => entry.path.startsWith('source/docs/')),
       false
     );
     await assert.rejects(
-      realpath(path.join(result.output, 'source/docs/architecture.md')),
+      realpath(path.join(result.output, 'source/docs')),
       /ENOENT/
     );
   }

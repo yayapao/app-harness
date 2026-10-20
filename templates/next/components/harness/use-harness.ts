@@ -112,6 +112,8 @@ export function useHarness(initialData: HarnessInitialData) {
                 : item
             ),
           }));
+        } else if (event.type === 'message_action') {
+          setData((current) => ({ ...current, messages: current.messages.map((item) => item.id === assistantId ? { ...item, action: event.action } : item) }));
         } else if (event.type === 'confirmation_request') {
           setState((current) => ({
             ...current,

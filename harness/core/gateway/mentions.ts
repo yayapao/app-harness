@@ -12,7 +12,9 @@ export function resolveMentions(registry: HarnessRegistry, rawMessage: string, d
     const explicitType = separator > 0 ? token.slice(0, separator) : '';
     const provider = explicitType ? registry.getContextProvider(explicitType) : undefined;
     const fallback = !explicitType && defaultType ? registry.getContextProvider(defaultType) : undefined;
-    const parsed = (provider ?? fallback)?.parse('@' + token);
+    let decoded: string;
+    try { decoded = decodeURIComponent(token); } catch { continue; }
+    const parsed = (provider ?? fallback)?.parse('@' + decoded);
     const type = parsed?.type;
     const value = parsed?.value;
     if (!type || !value || seen.has(type + ':' + value)) continue;

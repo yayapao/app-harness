@@ -76,6 +76,10 @@ export function createWorkbenchPlugin() {
             type: 'note',
             displayName: '便签',
             description: '通过 @note:ID 引用便签',
+            search: async (query, context) => {
+              context.signal.throwIfAborted();
+              return [...notes.values()].filter((note) => `${note.id} ${note.content}`.toLocaleLowerCase().includes(query.toLocaleLowerCase())).slice(0, context.limit).map((note) => ({ type: 'note', value: note.id, label: note.content.slice(0, 80) }));
+            },
             parse: (raw) => {
               const value = /^@note:([a-f0-9-]+)$/i.exec(raw)?.[1];
               return value ? { type: 'note', value, raw } : null;

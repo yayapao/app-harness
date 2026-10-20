@@ -15,6 +15,8 @@ import { AsyncEventQueue } from './event-queue';
 import { createConfirmHandler } from './gateway/confirmation';
 import { resolveContextBlocks, resolveMentions } from './gateway/mentions';
 import { createRunLog, createTraceRecorder } from './gateway/run-log';
+import { searchReferences } from './reference-search';
+import type { ReferenceSearchContext } from './composer';
 
 export class HarnessGateway {
   private registry: HarnessRegistry;
@@ -71,6 +73,10 @@ export class HarnessGateway {
 
   resolveMentions(rawMessage: string): MentionMatch[] {
     return resolveMentions(this.registry, rawMessage, this.options.defaultMentionType);
+  }
+
+  searchReferences(input: { query: string; type?: string }, context: ReferenceSearchContext) {
+    return searchReferences(this.registry, input, context);
   }
 
   private async resolveContextBlocks(mentions: MentionMatch[]): Promise<string[]> {

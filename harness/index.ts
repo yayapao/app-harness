@@ -11,3 +11,4 @@ export type {
 export { createChatResponse } from './browser/transport';
 export { createWorkbenchPlugin } from './plugins/workbench';
 export { createHarness } from './create-harness';
+export { createResourcePortalSkill } from './plugins/resource-portal';

@@ -50,3 +50,8 @@ export async function stopConversation(id: string) {
   if (!runtime.hasSession(z.uuid().parse(id))) throw new Error('会话不存在');
   runtime.gateway.stopSession(id);
 }
+
+export async function searchHarnessReferences(input: { query: string; type?: string; sessionId?: string }) {
+  const checked = z.object({ query: z.string().max(100), type: z.string().min(1).max(64).optional(), sessionId: z.uuid().optional() }).strict().parse(input);
+  return (await getBrowserRuntime(true))!.searchReferences(checked);
+}

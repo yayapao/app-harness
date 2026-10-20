@@ -25,6 +25,7 @@ app-harness 源仓库：${sourcePath}
 2. 直接访问 /harness 的完整对话页面；
 3. /settings/harness 管理页面，展示实际 Registry 的工具、Agent、Skill、上下文能力，保存模型、运行轮数和输出上限，并确保保存值影响下一次运行。
 Next.js App Router 优先参考 source/templates/next 的 parallel/intercepting route；其他框架按原 Router 实现同等入口，不强行引入 Next.js 组件。
+输入器可复用 / 指令、@ 多类型引用与 + 添加菜单；引用候选由宿主授权的 ContextProvider 提供。需要集合门户或 Prompt 交接时，读取 Skill 的 references/conversation-ui.md，选用只读规划插件、可编辑卡片、宿主打开接口与快捷跳转，保留真实入口、当前编辑和历史权限校验。
 
 把接入记录写入目标项目 docs/harness-integration.md，说明宿主、身份映射、存储、模型配置、真实工具和未验证项。运行目标项目允许的静态检查、Harness 测试及浏览器检查；默认不启动 dev、不 build、不打包。交付实际修改、入口地址、管理地址、配置方式和验证结果，区分静态检查、运行时测试、浏览器验收和真实模型检查。`;
 }

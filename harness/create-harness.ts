@@ -15,5 +15,6 @@ export function createHarness(options: HarnessGatewayOptions) {
     stopSession: (sessionId: string) => gateway.stopSession(sessionId),
     listSessionLogs: (sessionId?: string) => gateway.listSessionLogs(sessionId),
     resolveMentions: (message: string) => gateway.resolveMentions(message),
+    searchReferences: gateway.searchReferences.bind(gateway),
   };
 }

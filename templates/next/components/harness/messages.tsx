@@ -5,6 +5,7 @@ import { Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { HarnessMessagesProps } from '@/types';
 import { cn } from '@/lib/utils';
+import { MessageAction } from './message-action';
 
 function AssistantAvatar({ welcome = false }: { welcome?: boolean }) {
   return (
@@ -26,6 +27,7 @@ export function HarnessMessages({
   progress,
   error,
   demo,
+  promptTarget,
   onSuggest,
 }: HarnessMessagesProps) {
   const viewport = useRef<HTMLDivElement>(null);
@@ -138,6 +140,7 @@ export function HarnessMessages({
                         message.content || '未生成回复'
                       )}
                     </div>
+                    {!user && <MessageAction action={message.action} busy={busy} target={promptTarget} onSuggest={onSuggest} />}
                     <time
                       className="mt-1 block text-[11px] text-muted-foreground tabular-nums sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
                       dateTime={new Date(message.timestamp).toISOString()}

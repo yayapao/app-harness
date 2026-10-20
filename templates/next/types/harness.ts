@@ -27,6 +27,7 @@ export interface HarnessInitialData {
 export interface HarnessPanelProps {
   initialData: HarnessInitialData;
   presentation?: 'page' | 'dialog';
+  promptTarget?: import('@/harness/core/message-actions').PromptTarget;
 }
 
 export interface HarnessSidebarProps {
@@ -46,6 +47,7 @@ export interface HarnessMessagesProps {
   progress: string;
   error: string;
   demo: boolean;
+  promptTarget?: import('@/harness/core/message-actions').PromptTarget;
   onSuggest: (message: string) => void;
 }
 

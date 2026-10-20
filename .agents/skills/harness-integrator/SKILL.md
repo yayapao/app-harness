@@ -7,25 +7,29 @@ description: 将 app-harness Browser Harness 接入现有项目，发现并审�
 
 在用户指定的目标项目内完成可运行的 Harness 接入。模板提供 TypeScript 核心、模型和存储适配器、Next.js 宿主以及 React UI 参考。目标项目决定目录、语言、路由、鉴权和组件系统。
 
+工具包的说明文档统一维护在 [aiwiki/app-harness](https://github.com/yayapao/aiwiki/tree/main/app-harness)。本 Skill 与 references 是随代码发布的执行规则，迁移包保留它们，接入不依赖访问 aiwiki；不要在 app-harness 代码仓库恢复说明文档。
+
 ## 取得源码与证据
 
 先确认目标项目、源码位置及用户要求的业务场景。读取目标项目适用的 AGENTS.md、依赖、路由、服务层、鉴权和测试命令；保留工作区改动。源码位置可以是用户指定的本地 app-harness checkout 或 Git 仓库；读取模板不意味着用模板规范替换目标项目规范。
 
-GitHub 源仓库模式：如果用户给出 app-harness 的 Git 仓库地址，先在目标项目之外获取源码，并记录实际 commit。默认从 `https://github.com/yayapao/app-harness.git` 浅 clone 仓库默认分支，不硬编码 `main` 或 `master`；用户指定分支或 tag 时用 `git clone --depth 1 --branch <版本>`，指定完整 commit SHA 时使用普通 clone 或按该 SHA fetch 后 `git checkout --detach <SHA>`。私有仓库只使用现有 Git 凭据，不把 token 写入 URL、Prompt、迁移包或日志。不要把 GitHub `blob`/`raw` 单文件 URL 当作完整源码，因为它不包含脚本、引用文档和 UI 依赖。
+Git 源仓库模式：使用用户或当前版本接入 Prompt 指定的仓库，在目标项目之外获取源码，并记录来源及实际 commit。未指定来源时默认使用 `https://github.com/yayapao/app-harness.git`；指定了其他来源时不得自行切换到 GitHub。浅 clone 仓库默认分支，不硬编码 `main` 或 `master`；用户指定分支或 tag 时用 `git clone --depth 1 --branch <版本>`，指定完整 commit SHA 时使用普通 clone 或按该 SHA fetch 后 `git checkout --detach <SHA>`。私有仓库只使用现有 Git 凭据，不把 token 写入 URL、Prompt、迁移包或日志。不要把 `blob`/`raw` 单文件 URL 当作完整源码，因为它不包含脚本、引用文档和 UI 依赖。
 
-本地源仓库模式：如果已有 app-harness checkout，验证其 Git 根目录和目标版本后直接复用。在任意工作目录执行准备命令：
+本地源仓库模式：如果已有 app-harness checkout，验证其 Git 根目录、origin 与指定来源一致、目标版本符合要求后复用；不能只按目录名选择其他来源的 checkout。在任意工作目录执行准备命令：
 
 ```bash
 node "/path/to/app-harness/scripts/harness.mjs" prepare --project "/path/to/target"
 ```
 
-GitHub checkout 准备完成后，使用同一条命令，将源目录替换为实际 clone 目录。源目录、迁移包和目标项目必须相互独立。
+Git checkout 准备完成后，使用同一条命令，将源目录替换为实际 clone 目录。源目录、迁移包和目标项目必须相互独立。
 
 读取命令返回的迁移包中的 manifest.json 和 discovery.json。命令不修改目标项目，不安装依赖，不执行发现的工具。无 TypeScript 依赖时只有文件与 OpenAPI 发现，继续用 rg 和源码阅读补齐符号；扫描截断、跳过的大文件和其他语言须补查。
 
 迁移包模式：若用户已经给出 INTEGRATE.md 或迁移包目录，读取包内 manifest.json、discovery.json，并将包内 source/ 当作源码参考；不要再次准备，也不要依赖 manifest.source 指向的原机器路径。技能的 references/ 随包保留。
 
 参考 [宿主适配](references/host-adapters.md) 选择接入方式；阅读 [能力与验收](references/capabilities.md) 完成真实业务接入。
+
+任务涉及输入器、文件/项目/收藏夹引用、门户设计、Prompt 交接或对话内跳转时，阅读 [对话交互](references/conversation-ui.md)。核心已提供通用契约与 Next.js 组件；按目标业务选用，不复制 ViewAI 的 OA、数据表或发布逻辑。
 
 ## 完成接入
 
@@ -37,7 +41,7 @@ GitHub checkout 准备完成后，使用同一条命令，将源目录替换为�
 6. React 项目优先复用 AnimateIcons 和 Cult UI 的 Halo Input、Card、Tabs、Popover、Texture Button，适配现有 token、尺寸、依赖版本和减少动态效果。其他前端沿用自己的控件与图标体系，实现同等交互，不强行引入 React。保留复用代码的许可证和来源。
 7. 合并目标项目依赖、脚本和文档，用其包管理器安装确实需要的依赖。补齐真实工具、Agent/流程、鉴权拒绝、确认取消、流停止、参数生效和 UI 注册关系测试。运行目标项目允许的静态和运行时检查；未授权启动服务、build 或打包时不执行这些命令。
 
-NextPier 工程可通过其 `npm run upgrade:harness` 从 GitHub 获取本工具包，或在 app-harness 源码目录运行 `node scripts/harness.mjs install-nextpier --project <NextPier项目>`。自动安装只适用于保留入口开关、根布局插槽与共享组件的 NextPier 宿主；任意已有工程使用上述迁移流程。不要将整个 app-harness 工程覆盖到目标项目，不在目标业务工程运行模板 init.mjs。不要新增允许模型任意调用 HTTP、SQL、shell 或动态导入模块的通用工具。
+NextPier 工程的 `npm run upgrade:harness` 默认从 GitHub 获取本工具包；使用其他来源时必须传入 `-- --source <对应的本地checkout>`，或在该 app-harness 源码目录运行 `node scripts/harness.mjs install-nextpier --project <NextPier项目>`。自动安装只适用于保留入口开关、根布局插槽与共享组件的 NextPier 宿主；任意已有工程使用上述迁移流程。不要将整个 app-harness 工程覆盖到目标项目，不在目标业务工程运行模板 init.mjs。不要新增允许模型任意调用 HTTP、SQL、shell 或动态导入模块的通用工具。
 
 ## 交付
 

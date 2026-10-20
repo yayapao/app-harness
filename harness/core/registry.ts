@@ -160,6 +160,7 @@ export class HarnessRegistry {
         type: cp.type,
         displayName: cp.displayName,
         description: cp.description,
+        searchable: Boolean(cp.search),
       })),
     };
   }

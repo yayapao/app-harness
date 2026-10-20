@@ -15,6 +15,7 @@ export type {
   HarnessModelChunk,
   HarnessModelMessage,
   HarnessModelTool,
+  HarnessParameterSchema,
   HarnessPlugin,
   HarnessSession,
   HarnessSessionLog,
@@ -31,3 +32,11 @@ export type {
   ToolContext,
   ToolPermission,
 } from './types';
+
+export { runStructuredTask, StructuredTaskError } from './structured-task';
+export { composerTrigger, replaceComposerToken, insertComposerTrigger, referenceToken, composerCommands } from './composer';
+export type { ComposerTrigger, ComposerCommand, ReferenceSuggestion, ReferenceSearchContext } from './composer';
+export { safeLinkSchema, portalSourceSchema, portalDesignSchema, validatePortalDesign, parsePortalProposal, buildPortalPrompt, portalActionFromResult } from './resource-portal';
+export type { PortalSource, PortalDesign, PortalProposal } from './resource-portal';
+export { promptHandoffSchema } from './message-actions';
+export type { PromptTarget } from './message-actions';

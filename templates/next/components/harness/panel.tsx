@@ -29,6 +29,7 @@ import { HarnessInspect } from './inspect';
 export function HarnessPanel({
   initialData,
   presentation = 'page',
+  promptTarget,
 }: HarnessPanelProps) {
   const harness = useHarness(initialData);
   const { data, state } = harness;
@@ -151,11 +152,15 @@ export function HarnessPanel({
           progress={state.progress}
           error={state.error}
           demo={data.mode === 'demo'}
+          promptTarget={promptTarget}
           onSuggest={(message) => void harness.send(message)}
         />
         <HarnessComposer
+          key={data.sessionId}
           busy={state.busy}
           demo={data.mode === 'demo'}
+          sessionId={data.sessionId}
+          capabilities={data.capabilities}
           onSend={harness.send}
           onStop={harness.stop}
         />

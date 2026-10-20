@@ -13,12 +13,13 @@ import os from 'node:os';
 import path from 'node:path';
 import { discoverHarnessProject } from './harness-discovery.mjs';
 
+const documentation = 'https://github.com/yayapao/aiwiki/tree/main/app-harness';
+
 export const harnessSourceEntries = [
   'harness',
   'templates/next',
   'profiles',
   '.agents/skills/harness-integrator',
-  'docs/integration-prompt.md',
   'README.md',
   'package.json',
   'LICENSE',
@@ -118,6 +119,7 @@ export async function prepareHarnessIntegration(project, sourceRoot, options = {
       generator: 'app-harness-integration',
       source: 'app-harness',
       sourceVersion: pkg.version,
+      documentation,
       project: target,
       strategy: discovery.strategy,
       entrypoint: 'source/.agents/skills/harness-integrator/SKILL.md',
@@ -153,6 +155,7 @@ export async function prepareHarnessIntegration(project, sourceRoot, options = {
         '',
         '这是 app-harness 生成的只读迁移包。先读取 manifest.json、discovery.json，',
         '再读取 source/.agents/skills/harness-integrator/SKILL.md，按迁移包模式实施。',
+        `说明文档：[AI Wiki](${documentation})；接入不依赖访问文档仓库。`,
         'source/harness 提供框架无关核心、模型、Store、权限和确认边界。',
         'source/templates/next 提供 Next.js App Router 的对话入口、全局弹窗和管理页参考。',
         '候选业务函数和 HTTP 操作只供审核，必须完成真实鉴权、参数校验和副作用确认后才注册。',

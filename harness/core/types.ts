@@ -1,5 +1,15 @@
 export type ToolPermission = 'read' | 'write' | 'destructive';
 
+export interface HarnessParameterSchema {
+  type: string;
+  description: string;
+  enum?: string[];
+  properties?: Record<string, HarnessParameterSchema>;
+  items?: HarnessParameterSchema;
+  required?: string[];
+  additionalProperties?: boolean;
+}
+
 export interface ToolContext {
   sessionId: string;
   messageId: string;
@@ -13,11 +23,7 @@ export interface HarnessTool {
   category: string;
   parameters: {
     type: 'object';
-    properties: Record<string, {
-      type: string;
-      description: string;
-      enum?: string[];
-    }>;
+    properties: Record<string, HarnessParameterSchema>;
     required?: string[];
   };
   outputDescription?: string;
@@ -45,11 +51,7 @@ export interface HarnessAgent {
   requiresConfirmation?: boolean;
   parameters: {
     type: 'object';
-    properties: Record<string, {
-      type: string;
-      description: string;
-      enum?: string[];
-    }>;
+    properties: Record<string, HarnessParameterSchema>;
     required?: string[];
   };
   outputDescription: string;
@@ -68,6 +70,8 @@ export interface ContextProvider {
   type: string;
   displayName: string;
   description: string;
+  /** The host scopes candidates to its authenticated user/tenant. Search is read-only. */
+  search?: (query: string, context: import('./composer').ReferenceSearchContext) => Promise<import('./composer').ReferenceSuggestion[]>;
   parse: (raw: string) => MentionMatch | null;
   resolve: (match: MentionMatch) => Promise<Record<string, unknown>>;
   format: (data: Record<string, unknown>) => string;
@@ -220,7 +224,7 @@ export interface HarnessCapabilities {
     agentNames: string[];
     contextTypes: string[];
   }>;
-  contextProviders: Array<{ type: string; displayName: string; description: string }>;
+  contextProviders: Array<{ type: string; displayName: string; description: string; searchable?: boolean }>;
 }
 
 export interface OrchestratorConfig {
